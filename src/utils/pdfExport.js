@@ -74,6 +74,18 @@ export async function downloadPDF(facilityData, manualData, nameOverride) {
     ['Health Inspection', String(facilityData.healthRating || '--')],
     ['Staffing', String(facilityData.staffingRating || '--')],
     ['Quality of Resident Care', String(facilityData.qualityRating || '--')],
+    ['Short Term Hospitalization', facilityData.strHospitalization || '--'],
+    ['STR National Avg. for Hospitalization', facilityData.strNationalAvgHosp || '--'],
+    ['STR State Avg. for Hospitalization', facilityData.strStateAvgHosp || '--'],
+    ['STR ED Visit', facilityData.strEdVisit || '--'],
+    ['STR ED Visits National Avg.', facilityData.strNationalAvgEd || '--'],
+    ['STR ED Visits State Avg.', facilityData.strStateAvgEd || '--'],
+    ['LT Hospitalization', facilityData.ltHospitalization || '--'],
+    ['LT National Avg. for Hospitalization', facilityData.ltNationalAvgHosp || '--'],
+    ['LT State Avg. for Hospitalization', facilityData.ltStateAvgHosp || '--'],
+    ['ED Visit', facilityData.ltEdVisit || '--'],
+    ['LT ED Visits National Avg.', facilityData.ltNationalAvgEd || '--'],
+    ['LT ED Visits State Avg.', facilityData.ltStateAvgEd || '--'],
   ]
 
   let y = headerH + 7

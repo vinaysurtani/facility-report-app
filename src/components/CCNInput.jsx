@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { fetchFacilityByCCN } from '../services/cmsApi'
-import { mapCMSToReport } from '../utils/fieldMapper'
+import { fetchFacilityByCCN, fetchHospitalizationData } from '../services/cmsApi'
+import { mapCMSToReport, mapHospitalizationToReport } from '../utils/fieldMapper'
 
 export default function CCNInput({ onFacilityLoaded, onError }) {
   const [ccn, setCcn] = useState('')
@@ -23,7 +23,12 @@ export default function CCNInput({ onFacilityLoaded, onError }) {
     try {
       const raw = await fetchFacilityByCCN(trimmed)
       const mapped = mapCMSToReport(raw)
-      onFacilityLoaded(mapped)
+
+      // Fetch hospitalization metrics using state from facility data
+      const hospRaw = await fetchHospitalizationData(trimmed, mapped.state)
+      const hospMapped = mapHospitalizationToReport(hospRaw)
+
+      onFacilityLoaded({ ...mapped, ...hospMapped })
     } catch (err) {
       const msg = err.message || 'An unknown error occurred.'
       setLocalError(msg)
@@ -59,24 +64,9 @@ export default function CCNInput({ onFacilityLoaded, onError }) {
         >
           {loading ? (
             <span className="flex items-center gap-2">
-              <svg
-                className="animate-spin h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
               Looking up...
             </span>

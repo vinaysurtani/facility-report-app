@@ -68,6 +68,18 @@ export default function ReportPreview({ facilityData, manualData, nameOverride }
         <RatingRow label="Health Inspection" value={facilityData.healthRating} />
         <RatingRow label="Staffing" value={facilityData.staffingRating} />
         <RatingRow label="Quality of Resident Care" value={facilityData.qualityRating} />
+        <ReportRow label="Short Term Hospitalization" value={facilityData.strHospitalization} />
+        <ReportRow label="STR National Avg. for Hospitalization" value={facilityData.strNationalAvgHosp} />
+        <ReportRow label="STR State Avg. for Hospitalization" value={facilityData.strStateAvgHosp} />
+        <ReportRow label="STR ED Visit" value={facilityData.strEdVisit} />
+        <ReportRow label="STR ED Visits National Avg." value={facilityData.strNationalAvgEd} />
+        <ReportRow label="STR ED Visits State Avg." value={facilityData.strStateAvgEd} />
+        <ReportRow label="LT Hospitalization" value={facilityData.ltHospitalization} />
+        <ReportRow label="LT National Avg. for Hospitalization" value={facilityData.ltNationalAvgHosp} />
+        <ReportRow label="LT State Avg. for Hospitalization" value={facilityData.ltStateAvgHosp} />
+        <ReportRow label="ED Visit" value={facilityData.ltEdVisit} />
+        <ReportRow label="LT ED Visits National Avg." value={facilityData.ltNationalAvgEd} />
+        <ReportRow label="LT ED Visits State Avg." value={facilityData.ltStateAvgEd} />
 
         {/* Medicare Care Compare link */}
         <div className="mt-6 pt-4 border-t border-gray-300">

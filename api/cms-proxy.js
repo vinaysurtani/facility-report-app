@@ -1,20 +1,14 @@
-// Vercel serverless function — proxies CMS API requests server-side to avoid CORS.
-// Called as: GET /api/cms-proxy?ccn=686123
+// Vercel serverless function — generic CMS API proxy to avoid CORS.
+// Usage: GET /api/cms-proxy?dataset=4pq5-n9py&conditions[0][property]=...&limit=1
 export default async function handler(req, res) {
-  const { ccn } = req.query
+  const { dataset, ...rest } = req.query
 
-  if (!ccn) {
-    return res.status(400).json({ error: 'ccn query parameter is required' })
+  if (!dataset) {
+    return res.status(400).json({ error: 'dataset query parameter is required' })
   }
 
-  const params = new URLSearchParams({
-    'conditions[0][property]': 'cms_certification_number_ccn',
-    'conditions[0][value]': ccn,
-    'conditions[0][operator]': '=',
-    limit: 1,
-  })
-
-  const upstream = `https://data.cms.gov/provider-data/api/1/datastore/query/4pq5-n9py/0?${params}`
+  const params = new URLSearchParams(rest)
+  const upstream = `https://data.cms.gov/provider-data/api/1/datastore/query/${dataset}/0?${params}`
 
   try {
     const response = await fetch(upstream)
