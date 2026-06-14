@@ -1,16 +1,5 @@
 import jsPDF from 'jspdf'
 
-// Loads an image URL and returns a base64 data URL string.
-async function toDataURL(url) {
-  const res = await fetch(url)
-  const blob = await res.blob()
-  return new Promise((resolve) => {
-    const reader = new FileReader()
-    reader.onloadend = () => resolve(reader.result)
-    reader.readAsDataURL(blob)
-  })
-}
-
 // Generates PDF directly via jsPDF text rendering (no html2canvas).
 // Matches the layout of the reference "Facility Assessment Snapshot" document.
 export async function downloadPDF(facilityData, manualData, nameOverride) {
@@ -22,39 +11,35 @@ export async function downloadPDF(facilityData, manualData, nameOverride) {
   const labelColW = contentW * 0.44   // ~79mm for labels
   const valueColX = margin + labelColW
 
-  // --- HEADER: logo image + state abbreviation ---
-  const headerH = 28
-  // White header background (default)
-  pdf.setDrawColor(220, 220, 220)
-  pdf.setLineWidth(0.3)
-  pdf.line(0, headerH, pageW, headerH)
+  // --- HEADER BLOCK: navy background with required branding text ---
+  const headerH = 33
+  pdf.setFillColor(10, 31, 63) // #0a1f3f (navy)
+  pdf.rect(0, 0, pageW, headerH, 'F')
 
-  // Embed logo
-  try {
-    const logoData = await toDataURL('/logo.png')
-    // Logo: height 18mm, width proportional (~60mm based on ~3.3:1 aspect)
-    pdf.addImage(logoData, 'PNG', margin, 5, 60, 18)
-  } catch {
-    // Fallback to text if image fails to load
-    pdf.setFontSize(13)
-    pdf.setFont('helvetica', 'bold')
-    pdf.setTextColor(10, 31, 63)
-    pdf.text('INFINITE \u2014 Managed by MEDELITE', margin, 17)
-  }
+  // "INFINITE" bold white
+  pdf.setTextColor(255, 255, 255)
+  pdf.setFontSize(15)
+  pdf.setFont('helvetica', 'bold')
+  pdf.text('INFINITE', margin, 13)
 
-  // State — right-aligned, large
+  // "— Managed by MEDELITE" lighter
+  pdf.setFontSize(9)
+  pdf.setFont('helvetica', 'normal')
+  pdf.setTextColor(185, 210, 255)
+  pdf.text('\u2014 Managed by MEDELITE', margin + 33, 13)
+
+  // "FACILITY ASSESSMENT SNAPSHOT"
+  pdf.setFontSize(8)
+  pdf.setTextColor(200, 220, 255)
+  pdf.text('FACILITY ASSESSMENT SNAPSHOT', margin, 22)
+
+  // State abbreviation — large, right-aligned
   if (facilityData.state) {
     pdf.setFontSize(20)
     pdf.setFont('helvetica', 'bold')
-    pdf.setTextColor(10, 31, 63)
-    pdf.text(facilityData.state, pageW - margin, 14, { align: 'right' })
+    pdf.setTextColor(255, 255, 255)
+    pdf.text(facilityData.state, pageW - margin, 23, { align: 'right' })
   }
-
-  // "FACILITY ASSESSMENT SNAPSHOT" subtitle under state
-  pdf.setFontSize(7)
-  pdf.setFont('helvetica', 'normal')
-  pdf.setTextColor(100, 116, 139)
-  pdf.text('FACILITY ASSESSMENT SNAPSHOT', pageW - margin, 20, { align: 'right' })
 
   // --- TABLE ---
   const displayName = nameOverride || facilityData.facilityName
