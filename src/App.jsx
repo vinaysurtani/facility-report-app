@@ -3,6 +3,7 @@ import CCNInput from './components/CCNInput'
 import FacilityForm from './components/FacilityForm'
 import ReportPreview from './components/ReportPreview'
 import ExportButton from './components/ExportButton'
+import RatingsChart from './components/RatingsChart'
 
 export default function App() {
   const [facilityData, setFacilityData] = useState(null)
@@ -83,11 +84,14 @@ export default function App() {
           {/* Right Panel: Report Preview */}
           <div className="flex-1 flex justify-center">
             {facilityData ? (
-              <ReportPreview
-                facilityData={facilityData}
-                manualData={manualData}
-                nameOverride={nameOverride}
-              />
+              <>
+                <ReportPreview
+                  facilityData={facilityData}
+                  manualData={manualData}
+                  nameOverride={nameOverride}
+                />
+                <RatingsChart facilityData={facilityData} />
+              </>
             ) : (
               <div className="flex items-center justify-center h-64 text-muted text-sm">
                 <div className="text-center">
