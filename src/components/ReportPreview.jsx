@@ -11,9 +11,16 @@ function ReportRow({ label, value }) {
   )
 }
 
+function ratingBadgeClass(num) {
+  if (isNaN(num)) return 'bg-gray-100 text-gray-500'
+  if (num >= 4) return 'bg-emerald-100 text-emerald-700'
+  if (num === 3) return 'bg-amber-100 text-amber-700'
+  return 'bg-red-100 text-red-700'
+}
+
 function RatingRow({ label, value }) {
   const num = parseInt(value, 10)
-  const display = isNaN(num) ? 'N/A' : `${num}`
+  const display = isNaN(num) ? 'N/A' : `${num} / 5`
   const stars = isNaN(num) ? '' : '\u2605'.repeat(num) + '\u2606'.repeat(5 - num)
 
   return (
@@ -21,12 +28,12 @@ function RatingRow({ label, value }) {
       <div className="w-2/5 text-xs font-semibold text-gray-600 pr-4">
         {label}
       </div>
-      <div className="w-3/5 text-sm text-gray-900">
-        {display}
+      <div className="w-3/5 flex items-center gap-2">
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${ratingBadgeClass(num)}`}>
+          {display}
+        </span>
         {stars && (
-          <span className="ml-2 text-amber-500 text-xs tracking-wider">
-            {stars}
-          </span>
+          <span className="text-amber-500 text-xs tracking-wider">{stars}</span>
         )}
       </div>
     </div>

@@ -12,13 +12,21 @@ async function cmsQuery(dataset, conditions, limit = 50) {
     url = `/cms-api/${dataset}/0?${params}`
   }
 
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), 10000)
+
   let response
   try {
-    response = await fetch(url)
-  } catch {
+    response = await fetch(url, { signal: controller.signal })
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      throw new Error('Request timed out after 10 seconds. Please try again.')
+    }
     throw new Error(
       'Network error: Unable to reach CMS API. This may be a CORS issue — try again or check browser console.'
     )
+  } finally {
+    clearTimeout(timer)
   }
 
   if (!response.ok) throw new Error(`CMS API returned status ${response.status}`)

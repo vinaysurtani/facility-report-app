@@ -1,10 +1,48 @@
-import { useState } from 'react'
+import { useState, Component } from 'react'
 import CCNInput from './components/CCNInput'
 import FacilityForm from './components/FacilityForm'
 import ReportPreview from './components/ReportPreview'
 import ExportButton from './components/ExportButton'
 import RatingsChart from './components/RatingsChart'
 import DocxButton from './components/DocxButton'
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false, message: '' }
+  }
+
+  static getDerivedStateFromError(err) {
+    return { hasError: true, message: err.message || 'An unexpected error occurred.' }
+  }
+
+  componentDidCatch(err, info) {
+    console.error('ErrorBoundary caught:', err, info)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-surface">
+          <header className="bg-navy text-white px-6 py-3">
+            <span className="text-base font-bold tracking-widest">MEDELITE</span>
+          </header>
+          <div className="max-w-7xl mx-auto px-4 py-16 text-center">
+            <p className="text-red-600 font-semibold text-lg mb-2">Something went wrong</p>
+            <p className="text-sm text-muted">{this.state.message}</p>
+            <button
+              onClick={() => this.setState({ hasError: false, message: '' })}
+              className="mt-6 bg-navy text-white px-5 py-2 rounded-md text-sm font-medium"
+            >
+              Try again
+            </button>
+          </div>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 export default function App() {
   const [facilityData, setFacilityData] = useState(null)
@@ -39,6 +77,7 @@ export default function App() {
     : null
 
   return (
+    <ErrorBoundary>
     <div className="min-h-screen bg-surface">
       {/* Top Bar */}
       <header className="bg-navy text-white px-6 py-3 flex items-center justify-between">
@@ -125,5 +164,6 @@ export default function App() {
         </div>
       </div>
     </div>
+    </ErrorBoundary>
   )
 }
