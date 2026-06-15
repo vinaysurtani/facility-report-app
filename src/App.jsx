@@ -94,7 +94,7 @@ export default function App() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Panel: Input Form */}
           <div className="w-full lg:w-[380px] shrink-0 space-y-5">
-            <div className="bg-white rounded-lg border border-border p-5">
+            <div className="bg-white rounded-lg border border-gray-300 p-5">
               <CCNInput
                 onFacilityLoaded={handleFacilityLoaded}
                 onError={setError}
@@ -102,7 +102,7 @@ export default function App() {
             </div>
 
             {facilityData && (
-              <div className="bg-white rounded-lg border border-border p-5">
+              <div className="bg-white rounded-lg border border-gray-300 p-5">
                 <FacilityForm
                   facilityData={displayFacilityData}
                   manualData={manualData}

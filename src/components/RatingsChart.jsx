@@ -71,9 +71,9 @@ export default function RatingsChart({ facilityData }) {
   }
 
   return (
-    <div className="space-y-4 mt-4" className="w-full">
+    <div className="space-y-6 w-full">
       {/* Star Ratings */}
-      <div className="bg-white border border-border rounded-lg p-5">
+      <div className="bg-white border border-gray-300 rounded-lg p-5">
         <h3 className="text-xs font-bold text-navy uppercase tracking-widest mb-4">
           Star Ratings Overview
         </h3>
@@ -124,7 +124,7 @@ export default function RatingsChart({ facilityData }) {
       </div>
 
       {/* Hospitalization Comparison */}
-      <div className="bg-white border border-border rounded-lg p-5">
+      <div className="bg-white border border-gray-300 rounded-lg p-5">
         <h3 className="text-xs font-bold text-navy uppercase tracking-widest mb-4">
           Hospitalization &amp; ED Visit Rates vs Benchmarks
         </h3>

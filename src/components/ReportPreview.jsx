@@ -49,7 +49,7 @@ export default function ReportPreview({ facilityData, manualData, nameOverride }
   return (
     <div
       id="report-preview"
-      className="bg-white border border-gray-300 shadow-sm"
+      className="bg-white border border-gray-400 shadow-sm"
       style={{ width: '700px', minHeight: '900px' }}
     >
       <BrandingHeader state={facilityData.state} />
