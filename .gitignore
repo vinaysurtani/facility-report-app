@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Test coverage output
+coverage
+
+# Generated export samples
+*.pdf
+*.docx
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

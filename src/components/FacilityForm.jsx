@@ -51,6 +51,7 @@ export default function FacilityForm({
               type="text"
               value={facilityData.facilityName}
               onChange={(e) => onNameOverride(e.target.value)}
+              maxLength={200}
               className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
             />
           </div>
@@ -99,6 +100,7 @@ export default function FacilityForm({
               type="text"
               value={manualData.emr}
               onChange={(e) => onManualChange('emr', e.target.value)}
+              maxLength={100}
               placeholder="e.g. PointClickCare"
               className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
             />
@@ -123,6 +125,7 @@ export default function FacilityForm({
               type="text"
               value={manualData.patientType}
               onChange={(e) => onManualChange('patientType', e.target.value)}
+              maxLength={200}
               placeholder="e.g. Skilled Nursing, Long-term Care"
               className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
             />
@@ -149,6 +152,7 @@ export default function FacilityForm({
               type="text"
               value={manualData.previousPerformance}
               onChange={(e) => onManualChange('previousPerformance', e.target.value)}
+              maxLength={200}
               placeholder="e.g. Adequate, needs improvement"
               className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
             />
@@ -161,6 +165,7 @@ export default function FacilityForm({
               type="text"
               value={manualData.medicalCoverage}
               onChange={(e) => onManualChange('medicalCoverage', e.target.value)}
+              maxLength={200}
               placeholder="e.g. Telehealth + On-site"
               className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
             />

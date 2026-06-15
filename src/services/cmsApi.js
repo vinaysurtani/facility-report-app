@@ -1,6 +1,17 @@
 // Dev: Vite proxy routes /cms-api/{dataset}/0 → data.cms.gov (see vite.config.js)
 // Production (Vercel): /api/cms-proxy?dataset={dataset}&... fetches CMS server-side
 
+async function withRetry(fn, retries = 1) {
+  try {
+    return await fn()
+  } catch (err) {
+    if (retries > 0 && (err.message.includes('timed out') || err.message.includes('status 5'))) {
+      return withRetry(fn, retries - 1)
+    }
+    throw err
+  }
+}
+
 async function cmsQuery(dataset, conditions, limit = 50) {
   let url
 
@@ -34,14 +45,16 @@ async function cmsQuery(dataset, conditions, limit = 50) {
 }
 
 export async function fetchFacilityByCCN(ccn) {
-  const data = await cmsQuery(
-    '4pq5-n9py',
-    {
-      'conditions[0][property]': 'cms_certification_number_ccn',
-      'conditions[0][value]': ccn,
-      'conditions[0][operator]': '=',
-    },
-    1
+  const data = await withRetry(() =>
+    cmsQuery(
+      '4pq5-n9py',
+      {
+        'conditions[0][property]': 'cms_certification_number_ccn',
+        'conditions[0][value]': ccn,
+        'conditions[0][operator]': '=',
+      },
+      1
+    )
   )
 
   if (!data.results || data.results.length === 0) {
@@ -53,32 +66,38 @@ export async function fetchFacilityByCCN(ccn) {
 
 export async function fetchHospitalizationData(ccn, state) {
   const [measuresData, stateData, nationalData] = await Promise.all([
-    cmsQuery(
-      'ijh5-nb2v',
-      {
-        'conditions[0][property]': 'cms_certification_number_ccn',
-        'conditions[0][value]': ccn,
-        'conditions[0][operator]': '=',
-      },
-      10
+    withRetry(() =>
+      cmsQuery(
+        'ijh5-nb2v',
+        {
+          'conditions[0][property]': 'cms_certification_number_ccn',
+          'conditions[0][value]': ccn,
+          'conditions[0][operator]': '=',
+        },
+        10
+      )
     ),
-    cmsQuery(
-      'xcdc-v8bm',
-      {
-        'conditions[0][property]': 'state_or_nation',
-        'conditions[0][value]': state,
-        'conditions[0][operator]': '=',
-      },
-      1
+    withRetry(() =>
+      cmsQuery(
+        'xcdc-v8bm',
+        {
+          'conditions[0][property]': 'state_or_nation',
+          'conditions[0][value]': state,
+          'conditions[0][operator]': '=',
+        },
+        1
+      )
     ),
-    cmsQuery(
-      'xcdc-v8bm',
-      {
-        'conditions[0][property]': 'state_or_nation',
-        'conditions[0][value]': 'Nation',
-        'conditions[0][operator]': '=',
-      },
-      1
+    withRetry(() =>
+      cmsQuery(
+        'xcdc-v8bm',
+        {
+          'conditions[0][property]': 'state_or_nation',
+          'conditions[0][value]': 'Nation',
+          'conditions[0][operator]': '=',
+        },
+        1
+      )
     ),
   ])
 
