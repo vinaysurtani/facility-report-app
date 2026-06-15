@@ -5,6 +5,7 @@ import ReportPreview from './components/ReportPreview'
 import ExportButton from './components/ExportButton'
 import RatingsChart from './components/RatingsChart'
 import DocxButton from './components/DocxButton'
+import OpportunityPanel from './components/OpportunityPanel'
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -126,6 +127,13 @@ export default function App() {
                   disabled={false}
                 />
               </div>
+            )}
+
+            {facilityData && (
+              <OpportunityPanel
+                facilityData={facilityData}
+                manualData={manualData}
+              />
             )}
           </div>
 
