@@ -12,10 +12,13 @@ import {
   ExternalHyperlink,
 } from 'docx'
 
+const CELL_MARGINS = { top: 80, bottom: 80, left: 120, right: 120 }
+
 function cell(text, opts = {}) {
   return new TableCell({
     width: opts.width,
     shading: opts.shading,
+    margins: CELL_MARGINS,
     children: [
       new Paragraph({
         children: [
@@ -23,7 +26,7 @@ function cell(text, opts = {}) {
             text: String(text ?? '--'),
             bold: opts.bold || false,
             color: opts.color || '000000',
-            size: 18, // 9pt
+            size: 20, // 10pt
           }),
         ],
       }),
@@ -80,16 +83,17 @@ export async function downloadDocx(facilityData, manualData, nameOverride) {
                   new TableCell({
                     width: { size: 75, type: WidthType.PERCENTAGE },
                     shading: navyShading,
+                    margins: CELL_MARGINS,
                     children: [
                       new Paragraph({
                         children: [
-                          new TextRun({ text: 'INFINITE', bold: true, color: 'FFFFFF', size: 28 }),
-                          new TextRun({ text: '  \u2014 Managed by MEDELITE', color: 'B9D2FF', size: 18 }),
+                          new TextRun({ text: 'INFINITE', bold: true, color: 'FFFFFF', size: 32 }),
+                          new TextRun({ text: '  \u2014 Managed by MEDELITE', color: 'B9D2FF', size: 20 }),
                         ],
                       }),
                       new Paragraph({
                         children: [
-                          new TextRun({ text: 'FACILITY ASSESSMENT SNAPSHOT', color: 'C8DCFF', size: 14 }),
+                          new TextRun({ text: 'FACILITY ASSESSMENT SNAPSHOT', color: 'C8DCFF', size: 16 }),
                         ],
                       }),
                     ],
@@ -97,11 +101,12 @@ export async function downloadDocx(facilityData, manualData, nameOverride) {
                   new TableCell({
                     width: { size: 25, type: WidthType.PERCENTAGE },
                     shading: navyShading,
+                    margins: CELL_MARGINS,
                     children: [
                       new Paragraph({
                         alignment: AlignmentType.RIGHT,
                         children: [
-                          new TextRun({ text: facilityData.state || '', bold: true, color: 'FFFFFF', size: 48 }),
+                          new TextRun({ text: facilityData.state || '', bold: true, color: 'FFFFFF', size: 56 }),
                         ],
                       }),
                     ],
