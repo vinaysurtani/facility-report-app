@@ -128,26 +128,29 @@ export default function App() {
                 />
               </div>
             )}
-
-            {facilityData && (
-              <OpportunityPanel
-                facilityData={facilityData}
-                manualData={manualData}
-              />
-            )}
           </div>
 
-          {/* Right Panel: Report Preview */}
-          <div className="flex-1 flex justify-center">
+          {/* Right Panel: Report + Insights sidebar */}
+          <div className="flex-1 min-w-0">
             {facilityData ? (
-              <>
-                <ReportPreview
-                  facilityData={facilityData}
-                  manualData={manualData}
-                  nameOverride={nameOverride}
-                />
-                <RatingsChart facilityData={facilityData} />
-              </>
+              <div className="flex gap-6 items-start">
+                {/* Report preview — fixed width */}
+                <div className="shrink-0">
+                  <ReportPreview
+                    facilityData={facilityData}
+                    manualData={manualData}
+                    nameOverride={nameOverride}
+                  />
+                </div>
+                {/* Right sidebar: score + charts */}
+                <div className="flex-1 min-w-0 space-y-4">
+                  <OpportunityPanel
+                    facilityData={facilityData}
+                    manualData={manualData}
+                  />
+                  <RatingsChart facilityData={facilityData} />
+                </div>
+              </div>
             ) : (
               <div className="flex items-center justify-center h-64 text-muted text-sm">
                 <div className="text-center">
@@ -169,6 +172,7 @@ export default function App() {
               </div>
             )}
           </div>
+
         </div>
       </div>
     </div>

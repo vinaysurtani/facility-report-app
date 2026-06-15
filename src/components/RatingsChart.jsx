@@ -71,7 +71,7 @@ export default function RatingsChart({ facilityData }) {
   }
 
   return (
-    <div className="space-y-4 mt-4" style={{ width: '700px' }}>
+    <div className="space-y-4 mt-4" className="w-full">
       {/* Star Ratings */}
       <div className="bg-white border border-border rounded-lg p-5">
         <h3 className="text-xs font-bold text-navy uppercase tracking-widest mb-4">
