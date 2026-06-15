@@ -8,25 +8,30 @@ import {
   WidthType,
   AlignmentType,
   ShadingType,
+  BorderStyle,
   Packer,
   ExternalHyperlink,
 } from 'docx'
 
-const CELL_MARGINS = { top: 80, bottom: 80, left: 120, right: 120 }
+// Match PDF: tight rows, gray borders
+const CELL_MARGINS = { top: 55, bottom: 55, left: 100, right: 100 }
+const GRAY_BORDER = { style: BorderStyle.SINGLE, size: 1, color: 'B4B4B4' }
+const CELL_BORDERS = { top: GRAY_BORDER, bottom: GRAY_BORDER, left: GRAY_BORDER, right: GRAY_BORDER }
 
 function cell(text, opts = {}) {
   return new TableCell({
     width: opts.width,
     shading: opts.shading,
     margins: CELL_MARGINS,
+    borders: opts.noBorder ? undefined : CELL_BORDERS,
     children: [
       new Paragraph({
         children: [
           new TextRun({
             text: String(text ?? '--'),
             bold: opts.bold || false,
-            color: opts.color || '000000',
-            size: 20, // 10pt
+            color: opts.color || '3C3C3C',
+            size: 17, // 8.5pt — matches PDF body font
           }),
         ],
       }),
@@ -87,13 +92,13 @@ export async function downloadDocx(facilityData, manualData, nameOverride) {
                     children: [
                       new Paragraph({
                         children: [
-                          new TextRun({ text: 'INFINITE', bold: true, color: 'FFFFFF', size: 32 }),
-                          new TextRun({ text: '  \u2014 Managed by MEDELITE', color: 'B9D2FF', size: 20 }),
+                          new TextRun({ text: 'INFINITE', bold: true, color: 'FFFFFF', size: 30 }),
+                          new TextRun({ text: '  \u2014 Managed by MEDELITE', color: 'B9D2FF', size: 18 }),
                         ],
                       }),
                       new Paragraph({
                         children: [
-                          new TextRun({ text: 'FACILITY ASSESSMENT SNAPSHOT', color: 'C8DCFF', size: 16 }),
+                          new TextRun({ text: 'FACILITY ASSESSMENT SNAPSHOT', color: 'C8DCFF', size: 14 }),
                         ],
                       }),
                     ],
@@ -106,7 +111,7 @@ export async function downloadDocx(facilityData, manualData, nameOverride) {
                       new Paragraph({
                         alignment: AlignmentType.RIGHT,
                         children: [
-                          new TextRun({ text: facilityData.state || '', bold: true, color: 'FFFFFF', size: 56 }),
+                          new TextRun({ text: facilityData.state || '', bold: true, color: 'FFFFFF', size: 40 }),
                         ],
                       }),
                     ],
@@ -136,11 +141,11 @@ export async function downloadDocx(facilityData, manualData, nameOverride) {
           // --- MEDICARE URL ---
           new Paragraph({
             children: [
-              new TextRun({ text: 'Medicare Care Compare: ', size: 16, color: '64748b' }),
+              new TextRun({ text: 'Medicare Care Compare: ', size: 15, color: '646464' }),
               new ExternalHyperlink({
                 link: medicareUrl,
                 children: [
-                  new TextRun({ text: medicareUrl, size: 16, color: '2C7BE5', underline: {} }),
+                  new TextRun({ text: medicareUrl, size: 15, color: '2C7BE5', underline: {} }),
                 ],
               }),
             ],
