@@ -53,6 +53,26 @@ This file tracks architectural and implementation decisions made during developm
 - **Decision**: Before either PDF or Word export, check the 6 manual fields (EMR, Current Census, Type of Patient, Previous Coverage, Previous Provider Performance, Medical Coverage). If any are blank or whitespace-only, show `window.confirm()` with a bullet list of missing fields.
 - **Fix**: `DocxButton` initially lacked this check. Added the same validation block as `ExportButton`.
 
+### 12. AbortController fetch timeout in cmsApi.js
+- **Problem**: A slow or unresponsive CMS API would leave the UI stuck in a loading state with no feedback or recovery path.
+- **Fix**: Added `AbortController` with a 10-second `setTimeout` to every `cmsQuery()` call. The signal is passed to `fetch()`. On abort, catches `AbortError` specifically and throws a user-friendly message. Timer is cleared in `finally` to avoid spurious aborts on fast responses.
+
+### 13. React ErrorBoundary wrapping the main app
+- **Choice**: Class component `ErrorBoundary` defined in `App.jsx`, wrapping the entire app content below the header.
+- **Why**: Any uncaught render error (e.g. malformed API data causing a component to throw) would otherwise show a blank white screen. The boundary shows a recovery UI with a "Try again" button that resets the error state.
+- **Pattern**: `getDerivedStateFromError` sets the error flag; `componentDidCatch` logs to console for debugging.
+
+### 14. Color-coded star rating badges in ReportPreview
+- **Choice**: Replaced plain number display in `RatingRow` with a colored pill badge — green (`bg-emerald-100`) for ≥4, amber for 3, red for 1–2, gray for N/A.
+- **Format**: Badge shows "X / 5" with the existing star string (★★★☆☆) alongside it.
+- **Why**: Immediately communicates quality at a glance; stronger visual signal than a number alone.
+
+### 15. Hospitalization comparison chart (grouped bar)
+- **Choice**: Added two side-by-side grouped bar charts below the star ratings chart in `RatingsChart.jsx`. Left chart: Short-Stay metrics as percentages. Right chart: Long-Stay metrics as per-1,000-days rates.
+- **Why split**: STR and LT use different units (% vs rate) — combining them on one Y-axis would be misleading.
+- **Colors**: Facility = navy (`#0a1f3f`), State avg = slate (`#94a3b8`), National avg = light blue (`#93c5fd`).
+- **Data**: Parsed from `facilityData` string fields (e.g. `"18.5%"` → `18.5`) via a local `parseNum()` helper that strips `%` and handles `N/A`.
+
 ### 11. Test setup — Vitest + jsdom + Testing Library
 - **Choice**: Vitest (co-located with Vite config), jsdom environment, `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`.
 - **Config fix**: `globals: true` required in `vite.config.js` test block so `@testing-library/jest-dom` can access `expect` as a global. Without it, all test suites failed with "ReferenceError: expect is not defined".
