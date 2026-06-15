@@ -5,6 +5,24 @@ export default function DocxButton({ facilityData, manualData, nameOverride, dis
   const [loading, setLoading] = useState(false)
 
   async function handleExport() {
+    const emptyFields = [
+      ['EMR', manualData.emr],
+      ['Current Census', manualData.currentCensus],
+      ['Type of Patient', manualData.patientType],
+      ['Previous Coverage from Medelite', manualData.previousCoverage],
+      ['Previous Provider Performance', manualData.previousPerformance],
+      ['Medical Coverage', manualData.medicalCoverage],
+    ]
+      .filter(([, v]) => !v || v.toString().trim() === '')
+      .map(([label]) => `  • ${label}`)
+
+    if (emptyFields.length > 0) {
+      const confirmed = window.confirm(
+        `The following fields are empty:\n\n${emptyFields.join('\n')}\n\nDownload anyway?`
+      )
+      if (!confirmed) return
+    }
+
     setLoading(true)
     try {
       await downloadDocx(facilityData, manualData, nameOverride)
