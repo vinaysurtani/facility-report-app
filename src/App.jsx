@@ -90,7 +90,7 @@ export default function App() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-[1700px] mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Panel: Input Form */}
           <div className="w-full lg:w-[380px] shrink-0 space-y-5">
@@ -143,7 +143,7 @@ export default function App() {
                   />
                 </div>
                 {/* Right sidebar: score + charts */}
-                <div className="flex-1 min-w-0 space-y-4">
+                <div className="flex-1 min-w-[320px] space-y-4">
                   <OpportunityPanel
                     facilityData={facilityData}
                     manualData={manualData}
