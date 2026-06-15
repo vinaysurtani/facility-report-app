@@ -4,6 +4,7 @@ import FacilityForm from './components/FacilityForm'
 import ReportPreview from './components/ReportPreview'
 import ExportButton from './components/ExportButton'
 import RatingsChart from './components/RatingsChart'
+import DocxButton from './components/DocxButton'
 
 export default function App() {
   const [facilityData, setFacilityData] = useState(null)
@@ -72,12 +73,20 @@ export default function App() {
             )}
 
             {facilityData && (
-              <ExportButton
-                facilityData={facilityData}
-                manualData={manualData}
-                nameOverride={nameOverride}
-                disabled={false}
-              />
+              <div className="flex gap-3">
+                <ExportButton
+                  facilityData={facilityData}
+                  manualData={manualData}
+                  nameOverride={nameOverride}
+                  disabled={false}
+                />
+                <DocxButton
+                  facilityData={facilityData}
+                  manualData={manualData}
+                  nameOverride={nameOverride}
+                  disabled={false}
+                />
+              </div>
             )}
           </div>
 
